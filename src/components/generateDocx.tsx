@@ -2,9 +2,6 @@ import {
   Document,
   Packer,
   Paragraph,
-  Table,
-  TableRow,
-  TableCell,
   TextRun,
   HeadingLevel
 } from "docx";
