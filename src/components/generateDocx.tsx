@@ -9,25 +9,25 @@ import {
   HeadingLevel
 } from "docx";
 
-export const generateDocx = async (report: any, patient: any, data: any) => {
+export const generateDocx = async (report: any, patient: any) => {
 
 
-const table = new Table({
-  rows: data.SNCS.map((nerve: any) =>
-    nerve.tests.map((test: any) =>
-      new TableRow({
-        children: [
-          new TableCell({
-            children: [new Paragraph(test.site || "-")],
-          }),
-          new TableCell({
-            children: [new Paragraph(String(test.CV_m_s ?? "-"))],
-          }),
-        ],
-      })
-    )
-  ).flat(),
-});
+// const table = new Table({
+//   rows: data.SNCS.map((nerve: any) =>
+//     nerve.tests.map((test: any) =>
+//       new TableRow({
+//         children: [
+//           new TableCell({
+//             children: [new Paragraph(test.site || "-")],
+//           }),
+//           new TableCell({
+//             children: [new Paragraph(String(test.CV_m_s ?? "-"))],
+//           }),
+//         ],
+//       })
+//     )
+//   ).flat(),
+// });
 
   const doc = new Document({
     sections: [

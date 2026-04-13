@@ -24,7 +24,7 @@ function App() {
 
 
   const handleDownload = async () => {
-  const blob = await generateDocx(parsedReport, patient, data);
+  const blob = await generateDocx(parsedReport, patient);
   saveAs(blob, "raport.docx");
 };
 
@@ -45,7 +45,7 @@ function App() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const res = await fetch("http://localhost:4000/upload", {
+      const res = await fetch("https://medica-backend-v149.onrender.com/upload", {
         method: "POST",
         body: formData,
       });
