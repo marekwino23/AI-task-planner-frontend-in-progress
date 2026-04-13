@@ -1,0 +1,110 @@
+/* MedicalForm.scss */
+
+.form-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 50%, #e0e7ff 100%);
+}
+
+.medical-form {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(15px);
+  border-radius: 2rem;
+  padding: 3rem;
+  width: 100%;
+  max-width: 700px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  text-align: center;
+}
+
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.fancy-input {
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.fancy-input input,
+.fancy-input textarea,
+.fancy-input select {
+  padding: 1rem 1.2rem;
+  border-radius: 0px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+  resize: none;
+}
+
+.fancy-input label {
+  position: absolute;
+  left: 1.2rem;
+  top: 1rem;
+  font-size: 1rem;
+  color: #94a3b8;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.fancy-input input:focus + label,
+.fancy-input input:not(:placeholder-shown) + label,
+.fancy-input textarea:focus + label,
+.fancy-input textarea:not(:placeholder-shown) + label,
+.fancy-input select:focus + label,
+.fancy-input select:not([value=""]) + label {
+  top: -0.5rem;
+  left: 1rem;
+  font-size: 0.75rem;
+  color: #3b82f6;
+  background: #ffffff;
+  padding: 0 0.25rem;
+}
+
+.fancy-input input:focus,
+.fancy-input textarea:focus,
+.fancy-input select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+}
+
+.submit-btn {
+  background: linear-gradient(to right, #3b82f6, #6366f1);
+  color: white;
+  padding: 1rem 0;
+  border-radius: 0px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 768px) {
+  .input-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,126 @@
+$app-bg: #f5f7fb;
+$card-bg: #ffffff;
+$border: #e5e7eb;
+$text: #1f2937;
+$muted: #6b7280;
+$primary: #2563eb;
+$danger: #dc2626;
+
+.app-container {
+  background: $app-bg;
+  min-height: 100vh;
+  padding: 24px;
+  font-family: "Inter", sans-serif;
+}
+
+.card {
+  background: $card-bg;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border: 1px solid $border;
+  margin-bottom: 20px;
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: $text;
+    margin-bottom: 16px;
+    border-bottom: 1px solid $border;
+    padding-bottom: 8px;
+  }
+}
+
+.upload-box {
+  border: 2px dashed $border;
+  border-radius: 16px;
+  padding: 4px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    border-color: $primary;
+    background: #eff6ff;
+  }
+}
+
+.patient-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+
+  p {
+    font-size: 14px;
+  }
+}
+
+.nerve-section {
+  margin-bottom: 24px;
+
+  &__title {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: $text;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  thead {
+    background: #f1f5f9;
+
+    th {
+      padding: 10px;
+      text-align: left;
+      color: $muted;
+      font-weight: 600;
+    }
+  }
+
+  tbody {
+    tr {
+      border-top: 1px solid $border;
+      transition: 0.2s;
+
+      &:hover {
+        background: #f9fafb;
+      }
+    }
+
+    td {
+      padding: 10px;
+      text-align: center;
+
+      &:first-child {
+        text-align: left;
+      }
+    }
+  }
+}
+
+.danger {
+  color: $danger;
+  font-weight: 600;
+}
+
+.report-text {
+  text-align: justify;
+  line-height: 1.6;
+}
+
+.loader {
+  text-align: center;
+  padding: 20px;
+  color: $muted;
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.4 }
+  50% { opacity: 1 }
+  100% { opacity: 0.4 }
+}
