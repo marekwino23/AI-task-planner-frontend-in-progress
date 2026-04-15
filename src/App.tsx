@@ -87,7 +87,7 @@ function App() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const res = await fetch("http://medica-backend-v149.onrender.com/upload", {
+      const res = await fetch("https://medica-backend-v149.onrender.com/upload", {
         method: "POST",
         body: formData,
       });
