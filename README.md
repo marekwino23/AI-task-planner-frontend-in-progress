@@ -1,3 +1,27 @@
+
+# AI Task Planner
+
+🚧 Status: In Progress
+
+An AI-powered weekly planner built with React, TypeScript and FastAPI.
+
+## Current features
+
+- ✅ Add tasks
+- ✅ Task priorities
+- ✅ AI-generated weekly schedule
+- ✅ React + TypeScript frontend
+- ✅ FastAPI backend
+
+## Planned features
+
+- [ ] Edit tasks
+- [ ] Delete tasks
+- [ ] Loading and error states
+- [ ] Authentication
+- [ ] Save plans to database
+- [ ] Export to PDF
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
