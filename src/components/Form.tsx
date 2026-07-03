@@ -1,34 +1,115 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import "../styles/MedicaForm.scss";
-import FormData from "../types/FormData"
+import { Priority, Task, WeeklyPlan} from "../types/FormData";
+import PlanResult from "./PlanResult"
 
-const MedicalForm = () => {
-  const [formData, setFormData] = useState<FormData>({
-    firstName: "",
-    lastName: "",
-    dateOfBirth: "",
-    gender: "",
-    email: "",
-    phone: "",
-    address: "",
-    symptoms: "",
-    allergies: "",
-    medications: "",
-  });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+type FancyInputProps =
+  React.InputHTMLAttributes<HTMLInputElement> & {
+    label: string;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+type FancySelectProps =
+  React.SelectHTMLAttributes<HTMLSelectElement> & {
+    label: string;
+  };
+
+type NewTask = {
+    name: string;
+    priority: "Low" | "Medium" | "High";
+    estimatedHours: number;
+}; 
+
+const PlannerForm = () => {
+const [plannerData, setPlannerData] = useState({
+    goal: "",
+    hoursPerDay: 0,
+});
+const [tasks, setTasks] = useState<Task[]>([]);
+const [newTask, setNewTask] = useState<NewTask>({
+    name: "",
+    priority: "Medium",
+    estimatedHours: 1,
+});
+ const [weeklyPlan, setWeeklyPlan] = useState<WeeklyPlan | null>(null);
+
+ const handleChange = (
+  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+) => {
+  const { name, value, type } = e.target;
+
+  setPlannerData((prev) => ({
+    ...prev,
+    [name]: type === "number" ? Number(value) : value,
+  }));
+};
+
+
+const removeTask = (id:number)=>{
+  setTasks((prev) => prev.filter((task) => task.id !== id));
+}
+
+const addTask = () => {
+    if (!newTask.name.trim()) return;
+
+    if (newTask.estimatedHours <= 0) return;
+
+    setTasks(prev => [
+        ...prev,
+        {
+            id: Date.now(),
+            name: newTask.name,
+            priority: newTask.priority,
+            estimated_hours: newTask.estimatedHours,
+        }
+    ]);
+
+    setNewTask({
+        name: "",
+        priority: "Medium",
+        estimatedHours: 1,
+    });
+};
+
+  async function handleSubmit(e: React.FormEvent) {
+    
     e.preventDefault();
-    console.log("Submitted data:", formData);
-    alert("Formularz został wysłany!");
-  };
+
+    if (tasks.length === 0) {
+    alert("Add at least one task");
+    return;
+}
+
+    const payload = {
+  goal: plannerData.goal,
+  hours_per_day: plannerData.hoursPerDay,
+  tasks
+};
+    const url = "http://127.0.0.1:8000/generate-plan";
+      try {
+        const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+      }
+
+    const result: WeeklyPlan = await response.json();
+    setWeeklyPlan(result);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+        console.error(error.message);
+    } else {
+        console.error("Unknown error:", error);
+    }
+}
+}
 
   return (
     <div className="form-container">
@@ -39,25 +120,55 @@ const MedicalForm = () => {
         onSubmit={handleSubmit}
         className="medical-form"
       >
-        <h2>Formularz wprowadzania danych EMG</h2>
-        <p className="text-gray-500 text-center">Wypełnij dane pacjenta oraz informacje zdrowotne</p>
+        <h2>AI Tasks Planner</h2>
 
         <div className="input-grid">
-          <FancyInput name="firstName" value={formData.firstName} onChange={handleChange} label="Imię" required />
-          <FancyInput name="lastName" value={formData.lastName} onChange={handleChange} label="Nazwisko" required />
-          {/* <FancyInput type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} label="Data urodzenia" required />
-          <FancySelect name="gender" value={formData.gender} onChange={handleChange} label="Płeć" /> */}
+         <FancyInput
+    value={newTask.name}
+    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+        setNewTask({
+            ...newTask,
+            name: e.target.value,
+        })
+    }
+    label="Task"
+/>
+  <FancySelect
+    value={newTask.priority}
+    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+        setNewTask({
+            ...newTask,
+            priority: e.target.value as Priority,
+        })
+    }
+    label="Priority"
+/>
+   <FancyInput
+    type="number"
+    value={newTask.estimatedHours}
+    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+        setNewTask({
+            ...newTask,
+            estimatedHours: Number(e.target.value),
+        })
+    }
+    label="Estimated hours"
+/>
+          <button type="button" onClick={addTask}>
+    Add Task
+</button>
+          <FancyInput type="text" name="goal" value={plannerData.goal} onChange={handleChange} label="Your goal" required />
+          <FancyInput onChange={handleChange}
+    type="number"
+    label="Hours per day"
+    name="hoursPerDay"
+    value={plannerData.hoursPerDay}/>
         </div>
-
-        <div className="input-grid">
-          <FancyInput type="email" name="email" value={formData.email} onChange={handleChange} label="Email" />
-          <FancyInput type="tel" name="phone" value={formData.phone} onChange={handleChange} label="Telefon" />
-        </div>
-
-        <FancyTextarea name="address" value={formData.address} onChange={handleChange} label="Adres" />
-        <FancyTextarea name="symptoms" value={formData.symptoms} onChange={handleChange} label="Objawy" />
-        <FancyTextarea name="allergies" value={formData.allergies} onChange={handleChange} label="Alergie" />
-        <FancyTextarea name="medications" value={formData.medications} onChange={handleChange} label="Przyjmowane leki" />
+         <ul>
+         {tasks.map((task:Task) => (
+    <li key={task.id}>Name: {task.name} Priority: {task.priority} Estimated_Hours: {task.estimated_hours} <button onClick={() => removeTask(task.id)}>X</button> </li>
+))}
+          </ul>
 
         <motion.button
           whileTap={{ scale: 0.97 }}
@@ -65,37 +176,31 @@ const MedicalForm = () => {
           type="submit"
           className="submit-btn"
         >
-          Wyślij formularz
+          Send
         </motion.button>
       </motion.form>
+   {weeklyPlan && <PlanResult plan={weeklyPlan} />}
     </div>
   );
 };
 
-const FancyInput = ({ label, ...props }: any) => (
+const FancyInput = ({ label, ...props }: FancyInputProps) => (
   <div className="fancy-input">
     <input placeholder=" " {...props} />
     <label>{label}</label>
   </div>
 );
 
-const FancyTextarea = ({ label, ...props }: any) => (
+const FancySelect = ({ label, ...props }: FancySelectProps) => (
   <div className="fancy-input">
-    <textarea placeholder=" " {...props} />
+    <select {...props}>
+      <option value="">Wybierz...</option>
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+    </select>
     <label>{label}</label>
   </div>
 );
 
-// const FancySelect = ({ label, ...props }: any) => (
-//   <div className="fancy-input">
-//     <select {...props}>
-//       <option value="">Wybierz...</option>
-//       <option value="male">Mężczyzna</option>
-//       <option value="female">Kobieta</option>
-//       <option value="other">Inna</option>
-//     </select>
-//     <label>{label}</label>
-//   </div>
-// );
-
-export default MedicalForm;
+export default PlannerForm;

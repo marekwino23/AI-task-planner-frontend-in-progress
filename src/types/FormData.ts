@@ -1,12 +1,23 @@
-export default interface FormData {
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string;
-  gender: string;
-  email: string;
-  phone: string;
-  address: string;
-  symptoms: string;
-  allergies: string;
-  medications: string;
+
+export type Priority = "Low" | "Medium" | "High";
+
+export interface Task {
+  id: number;
+  name: string;
+  priority: Priority;
+  estimated_hours: number;
+}
+
+export interface PlannedTask {
+    title: string;
+    duration_hours: number;
+}
+
+export interface DayPlan {
+    day: number;
+    tasks: PlannedTask[];
+}
+
+export interface WeeklyPlan {
+    days: DayPlan[];
 }
